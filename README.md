@@ -1,0 +1,2 @@
+# ultetestervezo
+Ültetéstervező alkalmazás
