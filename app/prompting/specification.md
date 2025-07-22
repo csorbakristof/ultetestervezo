@@ -112,14 +112,16 @@ An important constratint is that a given slot cannot have overlapping timeframes
 
 ## Timeline view
 
-Another visualization of the setup is the timeline view where we see a large grid. Every column stands for a single slot in the garden (showing the bed name and the slot number), and each row is a week of the year. Every cell shows the plant (with small image and name) what is planted there at that time.
+The timeline view provides a comprehensive year-long visualization of the garden planting schedule through a large interactive grid. Every column represents a single slot in the garden (displaying the bed name and slot number), and each row represents a week of the year (1-52). Every cell shows the plant (with emoji and name) that is planted there during that specific time period.
 
 The timeline view includes:
-- Week numbers and corresponding dates for better temporal reference
-- Visual indicators for planting and harvesting periods
+- Week numbers and corresponding calendar dates for precise temporal reference
+- Visual indicators for planting and harvesting periods with clear start/end boundaries
 - Transition markers showing when one crop ends and another begins
-- Seasonal markers (frost dates, growing seasons) relevant to the user's location
-- Color coding to distinguish between different plant families for crop rotation planning
+- Interactive plant selection and placement directly on the timeline grid
+- Overlap prevention and conflict detection for sustainable garden management
+- Color coding to distinguish between planted and available periods
+- Scrollable interface supporting gardens of any size with full year visibility
 
 ## Editing capabilities
 
@@ -194,7 +196,27 @@ The garden view provides intuitive drag and drop functionality with optimized la
 - **Smart Border Detection**: Adjacent cell comparison ensures proper boundary visualization
 
 ### Timeline View Interaction
-The timeline view can be edited by choosing a plant and clicking on a cell of the grid to assign planting schedules.
+The timeline view provides comprehensive planting schedule management with an intuitive grid interface:
+
+#### Grid Layout and Navigation
+- **Transposed Grid Structure**: Rows represent weeks (1-52), columns represent individual slots
+- **Slot Headers**: Each column shows bed name and slot number for easy identification
+- **Week Headers**: Each row displays week number and approximate calendar date
+- **Scrollable Interface**: Horizontal and vertical scrolling for large gardens and full year view
+
+#### Interactive Planting Management
+- **Plant Selection**: Dropdown menu to choose from available plants in the library
+- **Click-to-Plant**: Click any cell to plant the selected plant starting at that week
+- **Click-to-Remove**: Click existing plantings to remove them from the schedule
+- **Growth Duration Integration**: Automatic calculation of planting periods based on plant growth duration
+- **Overlap Prevention**: System prevents conflicting plantings in the same slot with clear error messages
+
+#### Visual Indicators and Feedback
+- **Planted Periods**: Green background indicates active growing periods
+- **Period Boundaries**: Thick borders mark start and end weeks of each planting
+- **Plant Visualization**: Plant emoji and name displayed in active cells
+- **Tooltips**: Hover information shows detailed planting period and plant information
+- **Interactive Feedback**: Visual cues for clickable areas and available actions
 
 ### Garden Layout Tools
 In the Garden View, comprehensive tools allow creating, editing, and managing beds and slots:

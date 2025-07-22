@@ -155,8 +155,21 @@ Please update @specification.md to reflect the changes we made.
 
 ## Timeline View
 
+Now lets turn to the Timeline View. It should match the @specification.md .
+
+-----
+
+Modify the Timeline View to a transposed grid: rows should be the weeks and columns should be the slots.
+
+-----
+
+Update @specification.md to match the new changes.
+
 
 ## Persistency
+
+
+# Create user guide
 
 
 # Improve source code
