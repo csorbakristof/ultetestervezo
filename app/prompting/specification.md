@@ -25,9 +25,35 @@ This is the specification for an application which helps an individual to design
 
 ## Configuration of the garden
 
-The visual design of the garden is shown in a grid consisting of 30x30 cm cells. Rectangular areas represent beds and inside the beds, further rectangular areas called slots (typically rows or columns or squares) represent specific locations of filled with the same type of plant.
+The visual design of the garden is shown in a grid consisting of 30x30 cm cells. The grid size is configurable by the user within a range of 3-50 cells for both width and height dimensions, allowing for gardens of various sizes from small urban plots to larger suburban gardens.
 
-Each bed has a unique name and each its slots has a number (like bed "sunny 1", "row 3").
+Rectangular areas represent beds and inside the beds, further rectangular areas called slots (typically rows or columns or squares) represent specific locations filled with the same type of plant.
+
+Each bed has a unique name (editable by clicking on the bed name) and each of its slots has a number (like bed "sunny 1", "row 3").
+
+### Garden Layout Management
+
+The Garden View provides comprehensive tools for creating and managing garden structure:
+
+#### Grid Configuration
+- **Configurable Grid Size**: Users can set the garden dimensions from 3x3 to 50x50 cells
+- **Grid Size Validation**: Input validation ensures practical garden sizes
+- **Plant Preservation**: When reducing grid size, plants outside new bounds are automatically removed
+- **Visual Grid**: 30px x 30px cells provide clear visual reference for 30cm x 30cm real-world areas
+
+#### Bed and Slot Drawing Tools
+- **Drawing Mode Toggle**: Separate modes for drawing beds and slots
+- **Interactive Drawing**: Click and drag to create rectangular areas
+- **Visual Preview**: Real-time preview shows the area being drawn before release
+- **Bed Selection**: Dropdown to select which bed to add slots to
+- **Drawing Feedback**: Visual indicators and instructions guide the drawing process
+
+#### Bed and Slot Management
+- **Inline Name Editing**: Click on any bed name to edit it directly in the interface
+- **Deletion with Confirmation**: Right-click or use management panel to delete beds/slots with confirmation dialogs
+- **Hierarchical Display**: Management panel shows beds with their contained slots
+- **Compact Layout**: Space-efficient display with essential information only
+- **Visual Indicators**: Bed names appear in the upper-left corner of each bed area on the grid
 
 For a given point in time, the map of the garden shows the grid, the beds and slots with their identifier, and each slot contains a small image and name of the plant in that slot, in that given time.
 
@@ -61,21 +87,75 @@ The timeline view includes:
 ## Editing capabilities
 
 ### Garden View Interaction
-The garden view provides intuitive drag and drop functionality:
-- **Plant Palette**: Available plants are displayed as draggable cards below the garden grid
+The garden view provides intuitive drag and drop functionality with optimized layout:
+
+#### Interface Layout (Top to Bottom)
+1. **Control Panel**: Drawing tools, grid configuration, and mode toggles
+2. **Garden Grid**: Visual representation of the garden with drag-drop capability
+3. **Plant Palette**: Available plants displayed as draggable cards for immediate access
+4. **Bed and Slot Management**: Compact management interface for editing and organizing garden structure
+
+#### Plant Interaction
+- **Plant Palette**: Available plants are displayed as draggable cards positioned directly below the garden grid for easy access
 - **Drag and Drop Planting**: Users can drag plants from the palette and drop them onto any grid cell
 - **Visual Feedback**: Grid cells provide visual feedback during drag operations:
   - Highlight valid drop zones when hovering with a plant
-  - Change colors to indicate droppable areas
+  - Change colors to indicate droppable areas (blue for beds, green for slots)
   - Show blue borders for active drop targets
 - **Plant Removal**: Click on planted cells to remove plants from the garden
 - **Visual Plant Representation**: Each planted cell shows the plant's emoji icon with hover tooltips
+
+#### Bed and Slot Operations
+- **Drawing Tools**: Toggle between "Draw Bed" and "Draw Slot" modes
+- **Interactive Creation**: Click and drag on the grid to create rectangular beds or slots
+- **Real-time Preview**: Visual feedback shows the area being drawn
+- **Name Management**: Click on bed names in the grid or management panel to edit them inline
+- **Deletion Options**: Right-click on beds/slots in the grid or use management panel delete buttons
+- **Confirmation Dialogs**: All deletion operations require user confirmation
+
+#### Grid Configuration
+- **Size Adjustment**: Configure grid dimensions through a dedicated interface
+- **Range Validation**: Grid size limited to practical ranges (3-50 cells per dimension)
+- **Responsive Layout**: Interface adjusts to accommodate various grid sizes
+- **Scrollable Content**: Automatic scrolling when content exceeds viewport height
+
+#### Visual Design Elements
+- **Color Coding**: 
+  - Regular cells: Light gray background
+  - Bed areas: Light blue background with blue borders
+  - Slot areas: Light green background with green borders
+  - Planted cells: Green background indicating successful planting
+- **Bed Labels**: Bed names displayed only in the upper-left corner to minimize visual clutter
+- **Slot Numbers**: Slot identifiers shown in the bottom-right corner of slot areas
 
 ### Timeline View Interaction
 The timeline view can be edited by choosing a plant and clicking on a cell of the grid to assign planting schedules.
 
 ### Garden Layout Tools
-In the map view, additional tools allow creating and naming the beds and the slots.
+In the Garden View, comprehensive tools allow creating, editing, and managing beds and slots:
+
+#### Drawing and Creation Tools
+- **Bed Creation**: Select "Draw Bed" mode and click-drag on the grid to create rectangular bed areas
+- **Slot Creation**: Select a bed from the dropdown, choose "Draw Slot" mode, and draw within the selected bed
+- **Visual Preview**: Real-time feedback shows the area being created before finalizing
+- **Automatic Naming**: New beds receive default names that can be immediately edited
+
+#### Management Interface
+- **Compact Layout**: Bed and slot management panel positioned below the garden visualization
+- **Space Efficiency**: Simplified display showing only essential information (names, slot counts)
+- **Inline Editing**: Click on bed names to edit them directly in place
+- **Hierarchical Organization**: Beds displayed with their contained slots in an organized grid
+
+#### Editing Capabilities
+- **Name Editing**: Click on any bed name to enter edit mode with save/cancel options
+- **Keyboard Shortcuts**: Enter to save, Escape to cancel editing operations
+- **Deletion Workflows**: Confirmation dialogs prevent accidental deletion of beds and slots
+- **Grid-based Deletion**: Right-click on beds or slots directly in the garden grid for quick deletion
+
+#### Layout Optimization
+- **Scrollable Interface**: Full content scrolling when garden layouts extend beyond viewport
+- **Responsive Design**: Interface adapts to different garden sizes and screen dimensions
+- **Visual Hierarchy**: Garden grid prioritized at top, management tools below for logical workflow
 
 ## Smart Planning Features
 
@@ -173,7 +253,7 @@ The garden setup file follows this structure:
 {
   "garden": {
     "name": "My Garden",
-    "gridSize": {"width": 10, "height": 8},
+            "gridSize": {"width": 20, "height": 15},
     "beds": [
       {
         "id": "bed1",
@@ -184,6 +264,8 @@ The garden setup file follows this structure:
           {
             "id": "slot1",
             "number": "1",
+            "position": {"x": 0, "y": 0},
+            "size": {"width": 2, "height": 1},
             "plantings": [
               {
                 "plant": "carrot",

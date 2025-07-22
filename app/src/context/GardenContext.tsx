@@ -26,6 +26,8 @@ export interface Planting {
 export interface Slot {
   id: string;
   number: string;
+  position: { x: number; y: number };
+  size: { width: number; height: number };
   plantings: Planting[];
 }
 
@@ -55,6 +57,13 @@ type GardenAction =
   | { type: 'UPDATE_PLANT'; payload: { originalName: string; updatedPlant: Plant } }
   | { type: 'DELETE_PLANT'; payload: string }
   | { type: 'SET_CURRENT_WEEK'; payload: number }
+  | { type: 'UPDATE_GRID_SIZE'; payload: { width: number; height: number } }
+  | { type: 'ADD_BED'; payload: Bed }
+  | { type: 'UPDATE_BED'; payload: { bedId: string; updatedBed: Bed } }
+  | { type: 'DELETE_BED'; payload: string }
+  | { type: 'ADD_SLOT'; payload: { bedId: string; slot: Slot } }
+  | { type: 'UPDATE_SLOT'; payload: { bedId: string; slotId: string; updatedSlot: Slot } }
+  | { type: 'DELETE_SLOT'; payload: { bedId: string; slotId: string } }
   | { type: 'ADD_PLANTING'; payload: { bedId: string; slotId: string; planting: Planting } };
 
 const initialState: GardenState = {
@@ -116,6 +125,81 @@ function gardenReducer(state: GardenState, action: GardenAction): GardenState {
       };
     case 'SET_CURRENT_WEEK':
       return { ...state, currentWeek: action.payload };
+    case 'UPDATE_GRID_SIZE':
+      return {
+        ...state,
+        garden: {
+          ...state.garden,
+          gridSize: action.payload
+        }
+      };
+    case 'ADD_BED':
+      return {
+        ...state,
+        garden: {
+          ...state.garden,
+          beds: [...state.garden.beds, action.payload]
+        }
+      };
+    case 'UPDATE_BED':
+      return {
+        ...state,
+        garden: {
+          ...state.garden,
+          beds: state.garden.beds.map(bed => 
+            bed.id === action.payload.bedId ? action.payload.updatedBed : bed
+          )
+        }
+      };
+    case 'DELETE_BED':
+      return {
+        ...state,
+        garden: {
+          ...state.garden,
+          beds: state.garden.beds.filter(bed => bed.id !== action.payload)
+        }
+      };
+    case 'ADD_SLOT':
+      return {
+        ...state,
+        garden: {
+          ...state.garden,
+          beds: state.garden.beds.map(bed =>
+            bed.id === action.payload.bedId
+              ? { ...bed, slots: [...bed.slots, action.payload.slot] }
+              : bed
+          )
+        }
+      };
+    case 'UPDATE_SLOT':
+      return {
+        ...state,
+        garden: {
+          ...state.garden,
+          beds: state.garden.beds.map(bed =>
+            bed.id === action.payload.bedId
+              ? {
+                  ...bed,
+                  slots: bed.slots.map(slot =>
+                    slot.id === action.payload.slotId ? action.payload.updatedSlot : slot
+                  )
+                }
+              : bed
+          )
+        }
+      };
+    case 'DELETE_SLOT':
+      return {
+        ...state,
+        garden: {
+          ...state.garden,
+          beds: state.garden.beds.map(bed =>
+            bed.id === action.payload.bedId
+              ? { ...bed, slots: bed.slots.filter(slot => slot.id !== action.payload.slotId) }
+              : bed
+          )
+        }
+      };
     case 'ADD_PLANTING':
       return {
         ...state,
