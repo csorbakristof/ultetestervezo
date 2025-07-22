@@ -60,8 +60,21 @@ The timeline view includes:
 
 ## Editing capabilities
 
-Both the map view and the timeline view can be edited by choosing a plant and clicking on a cell of the grid.
+### Garden View Interaction
+The garden view provides intuitive drag and drop functionality:
+- **Plant Palette**: Available plants are displayed as draggable cards below the garden grid
+- **Drag and Drop Planting**: Users can drag plants from the palette and drop them onto any grid cell
+- **Visual Feedback**: Grid cells provide visual feedback during drag operations:
+  - Highlight valid drop zones when hovering with a plant
+  - Change colors to indicate droppable areas
+  - Show blue borders for active drop targets
+- **Plant Removal**: Click on planted cells to remove plants from the garden
+- **Visual Plant Representation**: Each planted cell shows the plant's emoji icon with hover tooltips
 
+### Timeline View Interaction
+The timeline view can be edited by choosing a plant and clicking on a cell of the grid to assign planting schedules.
+
+### Garden Layout Tools
 In the map view, additional tools allow creating and naming the beds and the slots.
 
 ## Smart Planning Features

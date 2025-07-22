@@ -53,3 +53,17 @@ Would you like me to help you implement any of these improvements by updating th
 ----
 
 Yes, please suggest improvements one-by-one and if I say "apply", make the modification to the file.
+
+--------
+
+We are in a git repository. Add a ".gitignore" file so that only that is version controled what is really needed. For example installed node modules should not be.
+
+------------
+
+I am testing the application in the garden view. In the bottom there are available plants and the text above it says I have to dran'n'drop it on the grid. But I cannot drag them... they seem to be only static images and text... please fix it.
+
+--------
+
+It works, thanks. Now please update @specification.md to contain this requirement, too.
+
+------------
