@@ -337,6 +337,7 @@ Each plant in the list has the following properties:
 - Import plant databases from external sources (CSV, JSON)
 - Smart JSON import supports both complete garden configurations and plant-only databases
 - Plant-only JSON imports add to existing library without affecting garden layout
+- Clear all plant assignments while preserving garden structure (beds and slots)
 
 ## JSON Data Structure
 

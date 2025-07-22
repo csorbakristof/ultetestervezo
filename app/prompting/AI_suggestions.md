@@ -190,10 +190,17 @@ Q: The import function of the application seems to expect the plant database in 
 
 Modify the import function to handle plant-only JSON.
 
+----
+
+Please update @specification.md and @userguide.md to reflect the changes.
+
+----
+
+In the Storage page, add a button to clear all slot-plant assignments, so that the garden gets completely clean.
+
+----
+
+Please also update  @userguide.md to reflect the changes.
+
 # Improve source code
-
-
-# Közben chatgpt.com
-
-I am creating an application where I can design my garden: what plants I will grow, when to plant and when to harvest them. I need a database (preferable in JSON format) which contains all the most common plants grown in Hungary. The database should include hungarian names, month of planting, growth duration, months of harvesting, an emoji representing the plant, and properties like water and sunlight requirements. Can you create this for me? First let's try this with the 10 most common plants.
 

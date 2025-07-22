@@ -213,10 +213,29 @@ Use the navigation bar at the top to switch between views:
 4. Click **"Import Plants Database (CSV)"** button
 5. **Note**: This adds plants to your existing library
 
+### Garden Maintenance
+
+#### Clear All Plant Assignments
+For starting fresh planting seasons or cleaning up experimental gardens:
+
+1. Navigate to the **"Garden Maintenance"** section
+2. Click the **"🧹 Clear All Plant Assignments"** button
+3. **Confirmation Required**: System will prompt to confirm this destructive action
+4. **Structure Preservation**: This removes all plantings but keeps your garden layout:
+   - ✅ **Preserved**: Garden grid size, beds, slots, and plant library
+   - ❌ **Removed**: All temporal plantings across all weeks
+5. **Use Cases**: 
+   - Start planning for a new growing season
+   - Clean up after experimental garden designs
+   - Reset garden state while keeping infrastructure
+
+**⚠️ Important**: This action cannot be undone. Export your garden setup before clearing if you want to preserve your planting history.
+
 ### Data Safety
-- **Backup Recommendation**: Export your garden before importing new data
+- **Backup Recommendation**: Export your garden before importing new data or clearing plantings
 - **Validation**: System checks data format and shows clear error messages
 - **Success Confirmation**: Clear feedback when operations complete successfully
+- **Destructive Actions**: Garden maintenance operations require explicit confirmation
 
 ### Current Data Summary
 The bottom panel shows your current garden statistics:
@@ -263,6 +282,7 @@ The bottom panel shows your current garden statistics:
 2. **Version Control**: Use descriptive filenames with dates
 3. **Share Libraries**: Export plant databases to share with others
 4. **Import Gradually**: Test imports with copies of your data first
+5. **Garden Maintenance**: Use Clear All Plant Assignments for fresh starts while preserving garden structure
 
 ### Interface Usage
 1. **Editor Mode**: Turn off for clean presentation views
@@ -290,6 +310,12 @@ The bottom panel shows your current garden statistics:
 - **Cause**: Editor mode is disabled
 - **Solution**: Check the "Editor" checkbox in Garden View
 - **Alternative**: Some controls may be scrolled out of view
+
+#### Accidentally cleared all plantings
+- **Cause**: Used "Clear All Plant Assignments" function
+- **Solution**: Restore from exported garden backup if available
+- **Prevention**: Always export garden setup before using maintenance functions
+- **Note**: Garden structure (beds, slots, plant library) remains intact
 
 #### Import fails with "Invalid garden setup format"
 - **Cause**: JSON data has incorrect structure for complete garden import

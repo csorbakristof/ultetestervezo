@@ -193,6 +193,20 @@ export default function Storage() {
     }
   };
 
+  // Clear all plantings from slots
+  const clearAllPlantings = () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to clear all plant assignments from all slots?\n\n' +
+      'This will remove all temporal plantings but keep your garden layout (beds and slots) intact.\n\n' +
+      'This action cannot be undone.'
+    );
+    
+    if (confirmed) {
+      dispatch({ type: 'CLEAR_ALL_PLANTINGS' });
+      showMessage('success', 'All plant assignments cleared successfully!');
+    }
+  };
+
   // Handle file upload
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -370,6 +384,40 @@ export default function Storage() {
             <li><strong>Plants Only:</strong> JSON with just "plants" array - adds plants to existing library</li>
           </ul>
           <p><strong>Note:</strong> Plant-only imports add to your existing library without affecting garden layout.</p>
+        </div>
+      </section>
+
+      {/* Garden Maintenance Section */}
+      <section style={{ marginBottom: '3rem' }}>
+        <h3>Garden Maintenance</h3>
+        
+        <div style={{ marginBottom: '1rem' }}>
+          <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
+            Maintenance operations for cleaning up your garden data while preserving the layout structure.
+          </p>
+          
+          <button
+            onClick={clearAllPlantings}
+            style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: '#dc3545',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '1rem',
+              fontWeight: 'bold'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#c82333'}
+            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#dc3545'}
+          >
+            🧹 Clear All Plant Assignments
+          </button>
+          
+          <div style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#666' }}>
+            <p><strong>⚠️ Warning:</strong> This removes all temporal plantings from all slots but keeps your garden layout (beds and slots) intact.</p>
+            <p><strong>Use case:</strong> Start fresh with plantings for a new growing season while keeping your garden structure.</p>
+          </div>
         </div>
       </section>
 

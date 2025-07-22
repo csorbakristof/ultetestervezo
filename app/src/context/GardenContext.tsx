@@ -65,7 +65,8 @@ type GardenAction =
   | { type: 'UPDATE_SLOT'; payload: { bedId: string; slotId: string; updatedSlot: Slot } }
   | { type: 'DELETE_SLOT'; payload: { bedId: string; slotId: string } }
   | { type: 'ADD_PLANTING'; payload: { bedId: string; slotId: string; planting: Planting } }
-  | { type: 'REMOVE_PLANTING'; payload: { bedId: string; slotId: string; startWeek: number } };
+  | { type: 'REMOVE_PLANTING'; payload: { bedId: string; slotId: string; startWeek: number } }
+  | { type: 'CLEAR_ALL_PLANTINGS' };
 
 const initialState: GardenState = {
   garden: {
@@ -242,6 +243,20 @@ function gardenReducer(state: GardenState, action: GardenAction): GardenState {
                 }
               : bed
           )
+        }
+      };
+    case 'CLEAR_ALL_PLANTINGS':
+      return {
+        ...state,
+        garden: {
+          ...state.garden,
+          beds: state.garden.beds.map(bed => ({
+            ...bed,
+            slots: bed.slots.map(slot => ({
+              ...slot,
+              plantings: []
+            }))
+          }))
         }
       };
     default:
