@@ -201,18 +201,120 @@ export default function GardenView() {
     }
   }, [editorMode]);
 
+  // Update visual representation based on current week and stored plantings
+  useEffect(() => {
+    const updateVisualPlantings = () => {
+      const newPlantedCells = new Map<string, Plant>();
+      
+      // Go through all slots and check for plantings in the current week
+      for (const bed of state.garden.beds) {
+        for (const slot of bed.slots) {
+          const currentPlanting = slot.plantings.find(planting => 
+            state.currentWeek >= planting.startWeek && state.currentWeek <= planting.endWeek
+          );
+          
+          if (currentPlanting) {
+            // Find the plant object
+            const plant = state.plants.find(p => p.name === currentPlanting.plant);
+            if (plant) {
+              // Fill all cells in the slot
+              for (let sx = slot.position.x; sx < slot.position.x + slot.size.width; sx++) {
+                for (let sy = slot.position.y; sy < slot.position.y + slot.size.height; sy++) {
+                  const cellKey = `${sx}-${sy}`;
+                  newPlantedCells.set(cellKey, plant);
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      setPlantedCells(newPlantedCells);
+    };
+    
+    updateVisualPlantings();
+  }, [state.currentWeek, state.garden.beds, state.plants]);
+
   const handlePlantDrop = (plant: Plant, x: number, y: number) => {
-    const cellKey = `${x}-${y}`;
-    setPlantedCells(prev => new Map(prev.set(cellKey, plant)));
+    const slotInfo = getSlotForCell(x, y);
+    
+    if (slotInfo) {
+      // If dropped on a slot, add a temporal planting
+      const slot = slotInfo.slot;
+      const bed = slotInfo.bed;
+      
+      // Calculate end week based on plant's growth duration
+      const startWeek = state.currentWeek;
+      const endWeek = startWeek + plant.growthDuration;
+      
+      // Check for overlapping plantings in this slot
+      const hasOverlap = slot.plantings.some(planting => 
+        (startWeek >= planting.startWeek && startWeek <= planting.endWeek) ||
+        (endWeek >= planting.startWeek && endWeek <= planting.endWeek) ||
+        (startWeek <= planting.startWeek && endWeek >= planting.endWeek)
+      );
+      
+      if (hasOverlap) {
+        alert(`Cannot plant ${plant.name} in slot ${slot.number}: overlapping timeframe with existing planting.`);
+        return;
+      }
+      
+      // Add the planting to the slot
+      const newPlanting = {
+        plant: plant.name,
+        startWeek,
+        endWeek
+      };
+      
+      dispatch({ 
+        type: 'ADD_PLANTING', 
+        payload: { 
+          bedId: bed.id, 
+          slotId: slot.id, 
+          planting: newPlanting 
+        } 
+      });
+    } else {
+      // If dropped on a cell without a slot, just plant in that cell (temporary visual only)
+      const cellKey = `${x}-${y}`;
+      setPlantedCells(prev => new Map(prev.set(cellKey, plant)));
+    }
   };
 
   const handleCellClick = (x: number, y: number) => {
-    const cellKey = `${x}-${y}`;
-    setPlantedCells(prev => {
-      const newMap = new Map(prev);
-      newMap.delete(cellKey);
-      return newMap;
-    });
+    const slotInfo = getSlotForCell(x, y);
+    
+    if (slotInfo) {
+      // If clicked on a slot, remove the current planting
+      const slot = slotInfo.slot;
+      const bed = slotInfo.bed;
+      
+      // Find planting that includes the current week
+      const currentPlanting = slot.plantings.find(planting => 
+        state.currentWeek >= planting.startWeek && state.currentWeek <= planting.endWeek
+      );
+      
+      if (currentPlanting) {
+        if (confirm(`Remove ${currentPlanting.plant} from slot ${slot.number}? This will remove the entire planting period (week ${currentPlanting.startWeek} - ${currentPlanting.endWeek}).`)) {
+          dispatch({ 
+            type: 'REMOVE_PLANTING', 
+            payload: { 
+              bedId: bed.id, 
+              slotId: slot.id, 
+              startWeek: currentPlanting.startWeek 
+            } 
+          });
+        }
+      }
+    } else {
+      // If clicked on a cell without a slot, just clear that cell (temporary visual only)
+      const cellKey = `${x}-${y}`;
+      setPlantedCells(prev => {
+        const newMap = new Map(prev);
+        newMap.delete(cellKey);
+        return newMap;
+      });
+    }
   };
 
   const handleGridSizeUpdate = () => {
@@ -315,6 +417,24 @@ export default function GardenView() {
   const cancelEditingBed = () => {
     setEditingBedId(null);
     setEditingBedName('');
+  };
+
+  const goToPreviousWeek = () => {
+    if (state.currentWeek > 1) {
+      dispatch({ type: 'SET_CURRENT_WEEK', payload: state.currentWeek - 1 });
+    }
+  };
+
+  const goToNextWeek = () => {
+    if (state.currentWeek < 52) {
+      dispatch({ type: 'SET_CURRENT_WEEK', payload: state.currentWeek + 1 });
+    }
+  };
+
+  const goToWeek = (week: number) => {
+    if (week >= 1 && week <= 52) {
+      dispatch({ type: 'SET_CURRENT_WEEK', payload: week });
+    }
   };
 
   const handleRightClick = (x: number, y: number, bed?: { id: string; name: string; position: { x: number; y: number } }, slot?: { id: string; number: string }) => {
@@ -452,7 +572,58 @@ export default function GardenView() {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-        <h2>Garden View - Week {state.currentWeek}</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <h2>Garden View</h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span style={{ fontWeight: 'bold' }}>Week:</span>
+            <button
+              onClick={goToPreviousWeek}
+              disabled={state.currentWeek <= 1}
+              style={{
+                padding: '0.25rem 0.5rem',
+                backgroundColor: state.currentWeek <= 1 ? '#f7fafc' : '#3182ce',
+                color: state.currentWeek <= 1 ? '#a0a0a0' : 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: state.currentWeek <= 1 ? 'not-allowed' : 'pointer',
+                fontSize: '0.875rem'
+              }}
+            >
+              ◀
+            </button>
+            <input
+              type="number"
+              value={state.currentWeek}
+              onChange={(e) => goToWeek(parseInt(e.target.value) || 1)}
+              min="1"
+              max="52"
+              style={{
+                width: '60px',
+                padding: '0.25rem',
+                textAlign: 'center',
+                border: '1px solid #e2e8f0',
+                borderRadius: '4px',
+                fontSize: '0.875rem'
+              }}
+            />
+            <button
+              onClick={goToNextWeek}
+              disabled={state.currentWeek >= 52}
+              style={{
+                padding: '0.25rem 0.5rem',
+                backgroundColor: state.currentWeek >= 52 ? '#f7fafc' : '#3182ce',
+                color: state.currentWeek >= 52 ? '#a0a0a0' : 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: state.currentWeek >= 52 ? 'not-allowed' : 'pointer',
+                fontSize: '0.875rem'
+              }}
+            >
+              ▶
+            </button>
+            <span style={{ fontSize: '0.875rem', color: '#666' }}>/ 52</span>
+          </div>
+        </div>
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
           <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginRight: '1rem' }}>
             <input

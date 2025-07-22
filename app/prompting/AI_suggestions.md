@@ -128,5 +128,36 @@ If I draw a slot into "Bed 2", it gets the number 1, although there is already a
 
 Update the @specification.md to reflect the new changes we made. Do not include the global slot numbering because I have rolled back that change.
 
+## Fill slots with the same plant
+
+Modify the drag'n'drop logic of plants so that if I drop a plant on a slot, all cells of the same slot get that plant. If I drop a plant on a cell without a slot, just that cell should get the plant.
+
+(AI noticed that deleting a plant should work in the same way!)
+---------------------
+
+From now if I start a prompt with "Q:", just answer my question and do not modify anything in the code.
+
+-----------------
+
+Q: if I drop a plant on a cell, does the data structure store which week I am modifying? The slots may have different plants in different time intervals, according to @specification.md .
+
+------------
+
+Now please modify the code as suggested by yourself to handle the temporal aspects of planting. If I drop a plant on a slot, you should assume that the current week is the week of planting and the slot should contain that plant until the end of the harvesting period of that plant.
+
+-----------------
+
+Add a control to Garden View to move the current week forward or backward. Update the map according to the new current week.
+
 ------------------
+
+Please update @specification.md to reflect the changes we made.
+
+## Timeline View
+
+
+## Persistency
+
+
+# Improve source code
 

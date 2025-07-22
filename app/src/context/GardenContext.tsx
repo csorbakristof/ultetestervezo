@@ -64,7 +64,8 @@ type GardenAction =
   | { type: 'ADD_SLOT'; payload: { bedId: string; slot: Slot } }
   | { type: 'UPDATE_SLOT'; payload: { bedId: string; slotId: string; updatedSlot: Slot } }
   | { type: 'DELETE_SLOT'; payload: { bedId: string; slotId: string } }
-  | { type: 'ADD_PLANTING'; payload: { bedId: string; slotId: string; planting: Planting } };
+  | { type: 'ADD_PLANTING'; payload: { bedId: string; slotId: string; planting: Planting } }
+  | { type: 'REMOVE_PLANTING'; payload: { bedId: string; slotId: string; startWeek: number } };
 
 const initialState: GardenState = {
   garden: {
@@ -212,6 +213,30 @@ function gardenReducer(state: GardenState, action: GardenAction): GardenState {
                   slots: bed.slots.map(slot =>
                     slot.id === action.payload.slotId
                       ? { ...slot, plantings: [...slot.plantings, action.payload.planting] }
+                      : slot
+                  )
+                }
+              : bed
+          )
+        }
+      };
+    case 'REMOVE_PLANTING':
+      return {
+        ...state,
+        garden: {
+          ...state.garden,
+          beds: state.garden.beds.map(bed =>
+            bed.id === action.payload.bedId
+              ? {
+                  ...bed,
+                  slots: bed.slots.map(slot =>
+                    slot.id === action.payload.slotId
+                      ? { 
+                          ...slot, 
+                          plantings: slot.plantings.filter(planting => 
+                            planting.startWeek !== action.payload.startWeek
+                          ) 
+                        }
                       : slot
                   )
                 }

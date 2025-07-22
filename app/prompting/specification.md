@@ -1,6 +1,30 @@
 # Specification for the planting designer
 
-This is the specification for an application which helps an individual to design their garden: the garden has predefined area (beds, rows) which can contain one plant at a time. The application helps to design the planting in terms of locations (what is planted and where) and the timing (when is something planted and what plants follow each other at the same location).
+This is the specification for an application which helps an individual to design their garden: the garden has predefined area (beds, rows) which can contain one plant at a time. The application helps to design the planting in terms of locat## Temporal Garden Management
+
+### Week-based Navigation
+The Garden View provides comprehensive time navigation allowing users to move through the growing season:
+
+#### Navigation Controls
+- **Week Display**: Current week prominently displayed in header (Week 1-52)
+- **Previous/Next Buttons**: Arrow buttons for sequential week navigation
+- **Direct Week Input**: Number input field for jumping to specific weeks
+- **Boundary Protection**: Navigation controls disabled at year boundaries (weeks 1 and 52)
+- **Visual Feedback**: Disabled states clearly indicated for boundary weeks
+
+#### Time-based Garden Visualization
+- **Dynamic Plant Display**: Plants appear/disappear based on their active growing periods
+- **Current Week Context**: Only plants within their planting timeframe are visible
+- **Temporal Accuracy**: Garden representation reflects actual planting schedules
+- **Season Overview**: Navigation provides "time-lapse" view of garden throughout the year
+
+### Planting Period Management
+- **Automatic Calculation**: Planting periods calculated from current week + plant growth duration
+- **Overlap Prevention**: System blocks conflicting plantings in the same slot with clear error messages
+- **Full Period Operations**: Plant removal affects entire growing periods, not just current week
+- **Confirmation Dialogs**: Detailed information shown before removing plantings (week range, plant name)
+
+## Data Management and File Operationsons (what is planted and where) and the timing (when is something planted and what plants follow each other at the same location).
 
 ## Application Overview
 
@@ -100,23 +124,49 @@ The timeline view includes:
 ## Editing capabilities
 
 ### Garden View Interaction
+The garden view provides intuitive drag and drop functionality with temporal planting management and optimized layout:
+
+#### Time Navigation and Control
+- **Week Navigation**: Previous/Next arrow buttons for step-by-step week progression
+- **Direct Week Selection**: Number input field for jumping to specific weeks (1-52)
+- **Current Week Display**: Prominent display of current week in the header
+- **Temporal Boundaries**: Navigation controls disabled at week boundaries (1 and 52)
+- **Real-time Garden Updates**: Garden visualization automatically updates to show plants active during the selected week
+
+#### Temporal Planting System
+- **Time-aware Planting**: When dropping plants on slots, planting starts at current week
+- **Growth Duration Integration**: Planting period calculated using plant's growthDuration property
+- **Overlap Prevention**: System prevents overlapping planting periods within the same slot
+- **Conflict Detection**: Clear error messages when attempting overlapping plantings
+- **Temporal Removal**: Clicking planted slots removes entire planting periods with confirmation
+- **Week-based Visualization**: Plants only visible during their active growing periods
+
+### Garden View Interaction
 The garden view provides intuitive drag and drop functionality with optimized layout:
 
 #### Interface Layout (Top to Bottom)
-1. **Control Panel**: Drawing tools, grid configuration, and mode toggles
-2. **Garden Grid**: Visual representation of the garden with drag-drop capability
+1. **Header Section**: Time navigation controls, drawing tools, grid configuration, and mode toggles
+2. **Garden Grid**: Visual representation of the garden with drag-drop capability  
 3. **Plant Palette**: Available plants displayed as draggable cards for immediate access
 4. **Bed and Slot Management**: Compact management interface for editing and organizing garden structure
 
 #### Plant Interaction
 - **Plant Palette**: Available plants are displayed as draggable cards positioned directly below the garden grid for easy access
-- **Drag and Drop Planting**: Users can drag plants from the palette and drop them onto any grid cell
+- **Temporal Drag and Drop Planting**: 
+  - Users can drag plants from the palette and drop them onto slots for time-based planting
+  - Slot planting creates temporal plantings from current week through harvest period
+  - Individual cell planting (outside slots) creates temporary visual-only placements
+- **Smart Slot Filling**: Dropping plants on slots fills the entire slot area with the plant
 - **Visual Feedback**: Grid cells provide visual feedback during drag operations:
   - Highlight valid drop zones when hovering with a plant
   - Change colors to indicate droppable areas (blue for beds, green for slots)
   - Show blue borders for active drop targets
-- **Plant Removal**: Click on planted cells to remove plants from the garden
+- **Temporal Plant Removal**: 
+  - Click on planted slots to remove entire planting periods with confirmation dialog
+  - Shows planting period details before removal (week range and plant name)
+  - Individual cell removal for non-slot plantings
 - **Visual Plant Representation**: Each planted cell shows the plant's emoji icon with hover tooltips
+- **Week-based Display**: Plants only appear when the current week falls within their planting period
 
 #### Bed and Slot Operations
 - **Drawing Tools**: Toggle between "Draw Bed" and "Draw Slot" modes
@@ -288,7 +338,12 @@ The garden setup file follows this structure:
               {
                 "plant": "carrot",
                 "startWeek": 6,
-                "endWeek": 15
+                "endWeek": 16
+              },
+              {
+                "plant": "lettuce", 
+                "startWeek": 20,
+                "endWeek": 28
               }
             ]
           }
@@ -316,4 +371,8 @@ The garden setup file follows this structure:
 }
 ```
 
-**Note**: Slot positions use absolute grid coordinates, not relative coordinates within beds. This ensures consistent positioning regardless of bed location.
+**Note**: 
+- Slot positions use absolute grid coordinates, not relative coordinates within beds. This ensures consistent positioning regardless of bed location.
+- Planting periods are automatically calculated: startWeek = currentWeek when planted, endWeek = startWeek + plant.growthDuration
+- The system prevents overlapping plantings within the same slot to maintain realistic growing constraints
+- Plants are only visible in the garden view when the current week falls within their planting period (startWeek ≤ currentWeek ≤ endWeek)
