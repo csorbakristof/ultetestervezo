@@ -1,0 +1,109 @@
+// This file has been refactored. The new implementation is in garden/GardenView.tsx
+// Temporarily importing the new version to maintain backward compatibility
+export { default } from './garden/GardenView';
+                      <button
+                        onClick={cancelEditingBed}
+                        style={{
+                          padding: '0.25rem 0.5rem',
+                          backgroundColor: '#e53e3e',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                          fontSize: '0.75rem'
+                        }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <h4 
+                        style={{ 
+                          margin: 0, 
+                          color: '#0066cc', 
+                          cursor: 'pointer',
+                          flex: 1,
+                          fontSize: '0.9rem'
+                        }}
+                        onClick={() => startEditingBed(bed.id, bed.name)}
+                        title="Click to edit bed name"
+                      >
+                        {bed.name}
+                      </h4>
+                      {debugMode && (
+                        <div style={{ fontSize: '0.7rem', color: '#666', marginTop: '0.25rem' }}>
+                          Position: ({bed.position.x}, {bed.position.y}) | Size: {bed.size.width}×{bed.size.height}
+                        </div>
+                      )}
+                      <button
+                        onClick={() => deleteBed(bed.id)}
+                        style={{
+                          padding: '0.25rem 0.5rem',
+                          backgroundColor: '#e53e3e',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                          fontSize: '0.7rem'
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
+                </div>
+                
+                {bed.slots.length > 0 ? (
+                  <div>
+                    <strong style={{ fontSize: '0.8rem' }}>Slots:</strong>
+                    <div style={{ marginTop: '0.25rem', display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
+                      {bed.slots.map(slot => (
+                        <div key={slot.id} style={{
+                          backgroundColor: '#f0f8e6',
+                          padding: '0.25rem 0.5rem',
+                          borderRadius: '4px',
+                          border: '1px solid #4d9900',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.25rem'
+                        }}>
+                          <span style={{ fontSize: '0.7rem', fontWeight: 'bold' }}>
+                            {slot.number}
+                          </span>
+                          {debugMode && (
+                            <div style={{ fontSize: '0.6rem', color: '#666', lineHeight: '1' }}>
+                              ({slot.position.x},{slot.position.y}) {slot.size.width}×{slot.size.height}
+                            </div>
+                          )}
+                          <button
+                            onClick={() => deleteSlot(bed.id, slot.id)}
+                            style={{
+                              padding: '0.125rem 0.25rem',
+                              backgroundColor: '#e53e3e',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '2px',
+                              cursor: 'pointer',
+                              fontSize: '0.6rem'
+                            }}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <p style={{ margin: 0, fontSize: '0.7rem', color: '#888', fontStyle: 'italic' }}>
+                    No slots yet.
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

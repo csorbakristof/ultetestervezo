@@ -204,3 +204,11 @@ Please also update  @userguide.md to reflect the changes.
 
 # Improve source code
 
+Now we seem to be done for the first round. Please have a look at the source code and suggest refactoring, improvements. For example too long source code files should be divided into multiple ones to increase readability.
+
+--------------
+
+Q: Did you manage to restore all previous functionalities after the refactor?
+
+(Now AI really checks functionalities in details!)
+
