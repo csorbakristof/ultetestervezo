@@ -111,6 +111,38 @@ The application provides intelligent recommendations:
 
 Among the settings pages there is a page where the list of plants and the metadata of the plants can be edited.
 
+### Plant Library Management Interface
+
+The Plant Library provides comprehensive CRUD (Create, Read, Update, Delete) operations for plant management:
+
+#### Plant Display and Editing
+- **Plant Cards**: Each plant is displayed as a card showing all its properties in a readable format
+- **Edit Mode**: Clicking "Edit" on any plant card opens an inline editing interface
+- **Form Layout**: The editing interface uses a responsive grid layout optimized for desktop use
+- **Field Organization**: Related fields are grouped together (timing, requirements, relationships)
+- **Input Validation**: Appropriate input controls for each data type (dropdowns for levels, number inputs for durations)
+
+#### Editing Interface Features
+- **Wide Form Layout**: Editor width of 600px to accommodate all fields without horizontal scrolling
+- **Scrollable Content**: Form fields are contained in a scrollable area with fixed header and action buttons
+- **Fixed Header**: Shows "Editing: [Plant Name]" to maintain context during editing
+- **Sticky Action Buttons**: Save and Cancel buttons remain visible at the bottom of the form
+- **Array Input Fields**: Comma-separated input for lists (planting months, companion plants, etc.)
+- **Responsive Design**: Maximum width of 90% viewport width for smaller screens
+
+#### Plant Operations
+- **Add New Plant**: Button to create a new plant with default values that can be immediately edited
+- **Edit Existing**: Modify any plant property including the plant name
+- **Delete Plant**: Remove plants with confirmation dialog
+- **Cancel Changes**: Revert all unsaved modifications
+- **Save Changes**: Persist updates to the plant database
+
+#### Data Validation and Handling
+- **Name Change Support**: System handles plant name changes by tracking original names during editing
+- **Array Parsing**: Automatic conversion of comma-separated values to arrays for storage
+- **Input Constraints**: Appropriate min/max values for numeric fields (growth duration, spacing, etc.)
+- **Dropdown Options**: Predefined choices for categorical fields (water need, sun need, season)
+
 Each plant in the list has the following properties:
 
 - name

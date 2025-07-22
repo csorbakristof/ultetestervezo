@@ -67,3 +67,25 @@ I am testing the application in the garden view. In the bottom there are availab
 It works, thanks. Now please update @specification.md to contain this requirement, too.
 
 ------------
+
+Now I am testing the Plant Library page. I can properly see the already available plants. If I want to add a new plant, its data are filled with some random values and I cannot edit them. Please make the plant data editable.
+
+-----------------
+
+I am testing the Plant Library. If I edit a plant, I cannot scroll down so I do not see all the editable fields and I cannot press the save or cancel buttons.
+
+(I did not ask explicitly for a fix but AI did it.)
+-------------
+
+OK, now the buttons are really visible. The editor is a bit too narrow. It is unconvenient to use horizontal scroll and in the dropdown lists, "2 - Medium" does not fit into the visible are either. Make it wider, we should have enough space for the editor, that has priority.
+
+------------------
+
+The editor does not save the changes even if I press the "Save" button. Everything remaing at the original value.
+
+(Error cause: plant name was used as ID and if changed, it could not find it to modify...)
+---------------------
+
+Cool, thanks. Now we have added the plant editing function. Please update the @prompting/specification.md to reflect these requirements.
+--------------
+

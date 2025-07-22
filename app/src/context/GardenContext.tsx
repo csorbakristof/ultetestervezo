@@ -52,7 +52,7 @@ export interface GardenState {
 type GardenAction = 
   | { type: 'UPDATE_GARDEN'; payload: Garden }
   | { type: 'ADD_PLANT'; payload: Plant }
-  | { type: 'UPDATE_PLANT'; payload: Plant }
+  | { type: 'UPDATE_PLANT'; payload: { originalName: string; updatedPlant: Plant } }
   | { type: 'DELETE_PLANT'; payload: string }
   | { type: 'SET_CURRENT_WEEK'; payload: number }
   | { type: 'ADD_PLANTING'; payload: { bedId: string; slotId: string; planting: Planting } };
@@ -107,7 +107,7 @@ function gardenReducer(state: GardenState, action: GardenAction): GardenState {
     case 'UPDATE_PLANT':
       return {
         ...state,
-        plants: state.plants.map(p => p.name === action.payload.name ? action.payload : p)
+        plants: state.plants.map(p => p.name === action.payload.originalName ? action.payload.updatedPlant : p)
       };
     case 'DELETE_PLANT':
       return {
