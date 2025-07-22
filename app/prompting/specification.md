@@ -335,6 +335,8 @@ Each plant in the list has the following properties:
 - Save and load garden setups to/from JSON files
 - Export garden plans to PDF for printing or sharing
 - Import plant databases from external sources (CSV, JSON)
+- Smart JSON import supports both complete garden configurations and plant-only databases
+- Plant-only JSON imports add to existing library without affecting garden layout
 
 ## JSON Data Structure
 
@@ -392,6 +394,37 @@ The garden setup file follows this structure:
   ]
 }
 ```
+
+### Plant-Only JSON Format
+
+For importing plant libraries without garden layout, the simplified format contains only the plants array:
+
+```json
+{
+  "plants": [
+    {
+      "name": "paradicsom",
+      "image": "🍅",
+      "plantingMonths": [4, 5, 6],
+      "harvestMonths": [7, 8, 9, 10],
+      "waterNeed": 3,
+      "sunNeed": 3,
+      "incompatiblePlants": ["fekete dió", "fenyő"],
+      "companionPlants": ["bazsalikom", "petrezselyem", "sárgarépa"],
+      "growthDuration": 16,
+      "spacingCm": 50,
+      "plantFamily": "Solanaceae",
+      "season": "summer",
+      "successionInterval": 4
+    }
+  ]
+}
+```
+
+**Import Behavior**:
+- **Complete Garden Setup**: JSON with both "garden" and "plants" properties replaces entire garden configuration
+- **Plant-Only Import**: JSON with only "plants" array adds plants to existing library without affecting garden layout
+- **Smart Detection**: System automatically determines import type based on JSON structure
 
 **Note**: 
 - Slot positions use absolute grid coordinates, not relative coordinates within beds. This ensures consistent positioning regardless of bed location.

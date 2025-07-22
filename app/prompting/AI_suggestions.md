@@ -177,6 +177,19 @@ Q: If I import a complete garden configuration, does it overwrite all previous d
 
 I have created a @userguide.md file. Can you create a complete user guide for the application into this file?
 
+# Create plant database
+
+The application can import plant library from JSON. Please create that JSON file for me using external sources. It should have the format mentioned in @specification.md and use hungarian names for the plants.
+Add the 20 most common plants grown in Hungary.
+
+-----
+
+Q: The import function of the application seems to expect the plant database in CVS format but I use JSON format. Does the implementation expect CSV format?
+
+----
+
+Modify the import function to handle plant-only JSON.
+
 # Improve source code
 
 

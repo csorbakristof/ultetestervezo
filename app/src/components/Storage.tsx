@@ -53,9 +53,24 @@ export default function Storage() {
 
       const data = JSON.parse(importText);
       
-      // Validate required structure
+      // Check if it's a plant-only JSON file
+      if (data.plants && Array.isArray(data.plants) && !data.garden) {
+        // Plant-only JSON import
+        let importedCount = 0;
+        data.plants.forEach((plant: Plant) => {
+          if (plant.name && plant.image) {
+            dispatch({ type: 'ADD_PLANT', payload: plant });
+            importedCount++;
+          }
+        });
+        setImportText('');
+        showMessage('success', `Imported ${importedCount} plants from JSON!`);
+        return;
+      }
+      
+      // Complete garden setup validation
       if (!data.garden || !data.plants) {
-        showMessage('error', 'Invalid garden setup format');
+        showMessage('error', 'Invalid garden setup format - must contain "garden" and "plants" properties');
         return;
       }
 
@@ -277,7 +292,7 @@ export default function Storage() {
               onChange={(e) => setImportFormat(e.target.value as 'json' | 'csv')}
               style={{ marginLeft: '0.5rem', padding: '0.25rem' }}
             >
-              <option value="json">Complete Garden Setup (JSON)</option>
+              <option value="json">Garden Setup or Plants (JSON)</option>
               <option value="csv">Plants Database (CSV)</option>
             </select>
           </label>
@@ -329,7 +344,7 @@ export default function Storage() {
               cursor: importFormat === 'json' ? 'pointer' : 'not-allowed'
             }}
           >
-            Import Garden Setup (JSON)
+            Import JSON Data
           </button>
           
           <button
@@ -349,8 +364,12 @@ export default function Storage() {
         </div>
 
         <div style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#666' }}>
-          <p><strong>Warning:</strong> Importing garden setup will replace your current garden completely.</p>
-          <p><strong>Note:</strong> Importing plants will add to your existing plant library.</p>
+          <p><strong>JSON Import Options:</strong></p>
+          <ul style={{ marginLeft: '1rem' }}>
+            <li><strong>Complete Garden Setup:</strong> JSON with "garden" and "plants" properties - replaces entire garden</li>
+            <li><strong>Plants Only:</strong> JSON with just "plants" array - adds plants to existing library</li>
+          </ul>
+          <p><strong>Note:</strong> Plant-only imports add to your existing library without affecting garden layout.</p>
         </div>
       </section>
 

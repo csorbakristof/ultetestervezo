@@ -184,21 +184,27 @@ Use the navigation bar at the top to switch between views:
 2. Click **"Export Garden Setup (JSON)"** button
 3. File downloads with your garden name and timestamp
 4. **Includes**: Garden layout, beds, slots, plantings, plant library, current week
+5. **Format**: Complete JSON structure suitable for full garden backup
 
 #### Plants Database (CSV)
 1. Select **"Plants Database (CSV)"** from Export Format
 2. Click **"Export Plants Database (CSV)"** button
 3. File downloads as "plants_database.csv"
 4. **Includes**: Only plant library data in spreadsheet format
+5. **Use Case**: Sharing plant collections or importing into other applications
 
 ### Importing Data
 
-#### Complete Garden Setup (JSON)
-1. Select **"Complete Garden Setup (JSON)"** from Import Format
+#### JSON Data Import (Garden Setup or Plants)
+1. Select **"Garden Setup or Plants (JSON)"** from Import Format
 2. **Upload File**: Use file browser to select .json file, OR
 3. **Paste Data**: Copy and paste JSON data into text area
-4. Click **"Import Garden Setup (JSON)"** button
-5. **Warning**: This replaces your entire current garden
+4. Click **"Import JSON Data"** button
+
+**Smart Import Detection**:
+- **Complete Garden Setup**: JSON with "garden" and "plants" properties replaces entire garden
+- **Plant-Only Database**: JSON with only "plants" array adds plants to existing library
+- **Automatic Detection**: System determines import type based on JSON structure
 
 #### Plants Database (CSV)
 1. Select **"Plants Database (CSV)"** from Import Format
@@ -218,6 +224,23 @@ The bottom panel shows your current garden statistics:
 - Number of beds and slots
 - Plant library count
 - Current week setting
+
+### Using Plant Databases
+**Hungarian Plants Database**: The application includes a comprehensive database of 20 common Hungarian plants with local names and growing information optimized for Central European conditions.
+
+**Example Import Workflow**:
+1. Download or locate the `hungarian_plants_database.json` file
+2. Go to Storage → Import Data
+3. Select "Garden Setup or Plants (JSON)"
+4. Upload the file or paste the JSON content
+5. Click "Import JSON Data"
+6. All 20 Hungarian plants will be added to your library
+
+**Plant Database Benefits**:
+- Local plant names and varieties
+- Climate-appropriate planting and harvest schedules
+- Companion planting recommendations
+- Realistic growth durations for Hungarian conditions
 
 ---
 
@@ -269,9 +292,11 @@ The bottom panel shows your current garden statistics:
 - **Alternative**: Some controls may be scrolled out of view
 
 #### Import fails with "Invalid garden setup format"
-- **Cause**: JSON data is missing required fields
-- **Solution**: Ensure JSON includes both "garden" and "plants" properties
+- **Cause**: JSON data has incorrect structure for complete garden import
+- **Solution**: For complete garden setup, ensure JSON has both "garden" and "plants" properties
+- **Alternative**: Use plant-only JSON format with just "plants" array for library import
 - **Check**: Validate JSON format using online JSON validators
+- **Note**: System automatically detects and handles both complete and plant-only JSON formats
 
 #### Bed/slot boundaries not showing correctly
 - **Cause**: Drawing outside valid grid area or overlapping existing areas
