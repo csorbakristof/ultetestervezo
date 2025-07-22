@@ -120,7 +120,6 @@ Each plant in the list has the following properties:
 - Save and load garden setups to/from JSON files
 - Export garden plans to PDF for printing or sharing
 - Import plant databases from external sources (CSV, JSON)
-- Backup and restore functionality
 
 ## JSON Data Structure
 
