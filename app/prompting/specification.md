@@ -40,6 +40,7 @@ The Garden View provides comprehensive tools for creating and managing garden st
 - **Grid Size Validation**: Input validation ensures practical garden sizes
 - **Plant Preservation**: When reducing grid size, plants outside new bounds are automatically removed
 - **Visual Grid**: 30px x 30px cells provide clear visual reference for 30cm x 30cm real-world areas
+- **Configuration Interface**: Dedicated panel with apply/cancel buttons for grid size changes
 
 #### Bed and Slot Drawing Tools
 - **Drawing Mode Toggle**: Separate modes for drawing beds and slots
@@ -47,6 +48,18 @@ The Garden View provides comprehensive tools for creating and managing garden st
 - **Visual Preview**: Real-time preview shows the area being drawn before release
 - **Bed Selection**: Dropdown to select which bed to add slots to
 - **Drawing Feedback**: Visual indicators and instructions guide the drawing process
+- **Absolute Positioning**: Slots use absolute grid coordinates for consistent placement
+
+#### Editor Mode Control
+- **Editor Checkbox**: Toggle to hide/show all editing tools and management interfaces
+- **Presentation Mode**: When Editor is unchecked, only the garden grid and plant palette remain visible
+- **Interface Simplification**: Non-editor mode provides clean viewing experience for design review
+
+#### Debug Mode Features
+- **Debug Checkbox**: Additional debugging tools for development and troubleshooting
+- **Cell Information Display**: Shows bed names and slot numbers in every grid cell when enabled
+- **Management Panel Debug Info**: Displays position and size coordinates for beds and slots when debug mode is active
+- **Visual Overlay**: Semi-transparent debug information overlay on grid cells
 
 #### Bed and Slot Management
 - **Inline Name Editing**: Click on any bed name to edit it directly in the interface
@@ -122,11 +135,13 @@ The garden view provides intuitive drag and drop functionality with optimized la
 #### Visual Design Elements
 - **Color Coding**: 
   - Regular cells: Light gray background
-  - Bed areas: Light blue background with blue borders
-  - Slot areas: Light green background with green borders
+  - Bed areas: Light blue background with blue borders for bed boundaries only
+  - Slot areas: Light green background with green borders for slot boundaries only
   - Planted cells: Green background indicating successful planting
+- **Border Visualization**: Only bed and slot boundaries show bold borders, not internal cell divisions
 - **Bed Labels**: Bed names displayed only in the upper-left corner to minimize visual clutter
 - **Slot Numbers**: Slot identifiers shown in the bottom-right corner of slot areas
+- **Smart Border Detection**: Adjacent cell comparison ensures proper boundary visualization
 
 ### Timeline View Interaction
 The timeline view can be edited by choosing a plant and clicking on a cell of the grid to assign planting schedules.
@@ -156,6 +171,9 @@ In the Garden View, comprehensive tools allow creating, editing, and managing be
 - **Scrollable Interface**: Full content scrolling when garden layouts extend beyond viewport
 - **Responsive Design**: Interface adapts to different garden sizes and screen dimensions
 - **Visual Hierarchy**: Garden grid prioritized at top, management tools below for logical workflow
+- **Interface Order**: Controls at top, garden grid below, plant palette directly under grid, management panel at bottom
+- **Editor Mode Toggle**: Complete interface simplification with Editor checkbox
+- **Debug Capabilities**: Optional debug mode for displaying technical information about beds and slots
 
 ## Smart Planning Features
 
@@ -253,7 +271,7 @@ The garden setup file follows this structure:
 {
   "garden": {
     "name": "My Garden",
-            "gridSize": {"width": 20, "height": 15},
+    "gridSize": {"width": 20, "height": 15},
     "beds": [
       {
         "id": "bed1",
@@ -264,7 +282,7 @@ The garden setup file follows this structure:
           {
             "id": "slot1",
             "number": "1",
-            "position": {"x": 0, "y": 0},
+            "position": {"x": 2, "y": 1},
             "size": {"width": 2, "height": 1},
             "plantings": [
               {
@@ -281,7 +299,7 @@ The garden setup file follows this structure:
   "plants": [
     {
       "name": "carrot",
-      "image": "carrot.png",
+      "image": "🥕",
       "plantingMonths": [3, 4, 5],
       "harvestMonths": [6, 7, 8],
       "waterNeed": 2,
@@ -297,3 +315,5 @@ The garden setup file follows this structure:
   ]
 }
 ```
+
+**Note**: Slot positions use absolute grid coordinates, not relative coordinates within beds. This ensures consistent positioning regardless of bed location.

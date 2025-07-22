@@ -1,6 +1,6 @@
 import { useGarden, Plant } from '../context/GardenContext';
 import { useDrag, useDrop } from 'react-dnd';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface DraggablePlantProps {
   plant: Plant;
@@ -50,6 +50,8 @@ interface DroppableGridCellProps {
   drawPreview?: { start: { x: number; y: number }; end: { x: number; y: number } };
   bed?: { id: string; name: string; position: { x: number; y: number } };
   slot?: { id: string; number: string };
+  getCellBorderStyle: (x: number, y: number) => { borderTop: string; borderRight: string; borderBottom: string; borderLeft: string };
+  debugMode: boolean;
 }
 
 function DroppableGridCell({ 
@@ -65,7 +67,9 @@ function DroppableGridCell({
   drawingMode,
   drawPreview,
   bed,
-  slot
+  slot,
+  getCellBorderStyle,
+  debugMode
 }: DroppableGridCellProps) {
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: 'plant',
@@ -99,6 +103,9 @@ function DroppableGridCell({
     onRightClick(x, y, bed, slot);
   };
 
+  // Get the border style for this cell
+  const borderStyle = getCellBorderStyle(x, y);
+
   return (
     <div
       ref={drop}
@@ -112,7 +119,10 @@ function DroppableGridCell({
         gridColumn: x + 1, 
         gridRow: y + 1,
         backgroundColor,
-        border: isOver && canDrop ? '2px solid #3182ce' : bed ? '2px solid #0066cc' : slot ? '2px solid #4d9900' : '1px solid #e2e8f0',
+        borderTop: isOver && canDrop ? '2px solid #3182ce' : borderStyle.borderTop,
+        borderRight: isOver && canDrop ? '2px solid #3182ce' : borderStyle.borderRight,
+        borderBottom: isOver && canDrop ? '2px solid #3182ce' : borderStyle.borderBottom,
+        borderLeft: isOver && canDrop ? '2px solid #3182ce' : borderStyle.borderLeft,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -131,6 +141,28 @@ function DroppableGridCell({
       {slot && (
         <div style={{ position: 'absolute', bottom: '1px', right: '2px', fontSize: '8px', color: '#4d9900', fontWeight: 'bold' }}>
           {slot.number}
+        </div>
+      )}
+      {debugMode && (
+        <div style={{ 
+          position: 'absolute', 
+          top: '0', 
+          left: '0', 
+          right: '0', 
+          bottom: '0', 
+          display: 'flex', 
+          flexDirection: 'column', 
+          justifyContent: 'center', 
+          alignItems: 'center',
+          fontSize: '6px',
+          color: '#333',
+          fontWeight: 'bold',
+          backgroundColor: 'rgba(255, 255, 255, 0.7)',
+          lineHeight: '1'
+        }}>
+          {bed && <div style={{ color: '#0066cc' }}>{bed.name}</div>}
+          {slot && <div style={{ color: '#4d9900' }}>S:{slot.number}</div>}
+          {!bed && !slot && <div style={{ color: '#888' }}>-</div>}
         </div>
       )}
       {plantedItem && (
@@ -155,6 +187,19 @@ export default function GardenView() {
   const [drawEnd, setDrawEnd] = useState<{ x: number; y: number } | null>(null);
   const [editingBedId, setEditingBedId] = useState<string | null>(null);
   const [editingBedName, setEditingBedName] = useState<string>('');
+  const [editorMode, setEditorMode] = useState<boolean>(true);
+  const [debugMode, setDebugMode] = useState<boolean>(false);
+
+  // Reset drawing mode when editor mode is disabled
+  useEffect(() => {
+    if (!editorMode) {
+      setDrawingMode('none');
+      setIsDrawing(false);
+      setDrawStart(null);
+      setDrawEnd(null);
+      setShowGridConfig(false);
+    }
+  }, [editorMode]);
 
   const handlePlantDrop = (plant: Plant, x: number, y: number) => {
     const cellKey = `${x}-${y}`;
@@ -223,7 +268,7 @@ export default function GardenView() {
     const newSlot = {
       id: `slot-${Date.now()}`,
       number: `${bed.slots.length + 1}`,
-      position: { x: minX, y: minY },
+      position: { x: minX, y: minY }, // Store absolute grid coordinates
       size: { width: maxX - minX + 1, height: maxY - minY + 1 },
       plantings: []
     };
@@ -329,15 +374,76 @@ export default function GardenView() {
   const getSlotForCell = (x: number, y: number) => {
     for (const bed of state.garden.beds) {
       for (const slot of bed.slots) {
-        if (x >= bed.position.x + slot.position.x && 
-            x < bed.position.x + slot.position.x + slot.size.width &&
-            y >= bed.position.y + slot.position.y && 
-            y < bed.position.y + slot.position.y + slot.size.height) {
-          return slot;
+        if (x >= slot.position.x && 
+            x < slot.position.x + slot.size.width &&
+            y >= slot.position.y && 
+            y < slot.position.y + slot.size.height) {
+          return { slot, bed };
         }
       }
     }
     return null;
+  };
+
+  // Helper function to determine border styles for a cell
+  const getCellBorderStyle = (x: number, y: number) => {
+    const bed = getBedForCell(x, y);
+    const slotInfo = getSlotForCell(x, y);
+    
+    let borderTop = '1px solid #e2e8f0';
+    let borderRight = '1px solid #e2e8f0';
+    let borderBottom = '1px solid #e2e8f0';
+    let borderLeft = '1px solid #e2e8f0';
+
+    // Check for boundaries by comparing with adjacent cells
+    if (bed || slotInfo) {
+      // Check if adjacent cells are outside the current bed/slot
+      const topCell = y > 0 ? getBedForCell(x, y - 1) : null;
+      const rightCell = x < state.garden.gridSize.width - 1 ? getBedForCell(x + 1, y) : null;
+      const bottomCell = y < state.garden.gridSize.height - 1 ? getBedForCell(x, y + 1) : null;
+      const leftCell = x > 0 ? getBedForCell(x - 1, y) : null;
+
+      const topSlotInfo = y > 0 ? getSlotForCell(x, y - 1) : null;
+      const rightSlotInfo = x < state.garden.gridSize.width - 1 ? getSlotForCell(x + 1, y) : null;
+      const bottomSlotInfo = y < state.garden.gridSize.height - 1 ? getSlotForCell(x, y + 1) : null;
+      const leftSlotInfo = x > 0 ? getSlotForCell(x - 1, y) : null;
+
+      if (slotInfo) {
+        // For slots, check if adjacent cells belong to the same slot
+        const currentSlot = slotInfo.slot;
+        if (y === 0 || !topSlotInfo || topSlotInfo.slot.id !== currentSlot.id) {
+          borderTop = '2px solid #4d9900';
+        }
+        if (x === state.garden.gridSize.width - 1 || !rightSlotInfo || rightSlotInfo.slot.id !== currentSlot.id) {
+          borderRight = '2px solid #4d9900';
+        }
+        if (y === state.garden.gridSize.height - 1 || !bottomSlotInfo || bottomSlotInfo.slot.id !== currentSlot.id) {
+          borderBottom = '2px solid #4d9900';
+        }
+        if (x === 0 || !leftSlotInfo || leftSlotInfo.slot.id !== currentSlot.id) {
+          borderLeft = '2px solid #4d9900';
+        }
+      }
+      
+      if (bed) {
+        // For beds, check if adjacent cells belong to the same bed
+        // Only apply bed borders if slot borders haven't been applied (slot borders take priority)
+        if ((y === 0 || !topCell || topCell.id !== bed.id) && borderTop === '1px solid #e2e8f0') {
+          borderTop = '2px solid #0066cc';
+        }
+        if ((x === state.garden.gridSize.width - 1 || !rightCell || rightCell.id !== bed.id) && borderRight === '1px solid #e2e8f0') {
+          borderRight = '2px solid #0066cc';
+        }
+        if ((y === state.garden.gridSize.height - 1 || !bottomCell || bottomCell.id !== bed.id) && borderBottom === '1px solid #e2e8f0') {
+          borderBottom = '2px solid #0066cc';
+        }
+        if ((x === 0 || !leftCell || leftCell.id !== bed.id) && borderLeft === '1px solid #e2e8f0') {
+          borderLeft = '2px solid #0066cc';
+        }
+      }
+    }
+
+    return { borderTop, borderRight, borderBottom, borderLeft };
   };
 
   // Create draw preview object
@@ -347,65 +453,87 @@ export default function GardenView() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
         <h2>Garden View - Week {state.currentWeek}</h2>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button
-            onClick={() => setDrawingMode('bed')}
-            style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: drawingMode === 'bed' ? '#38a169' : '#e2e8f0',
-              color: drawingMode === 'bed' ? 'white' : '#333',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            Draw Bed
-          </button>
-          <select
-            value={selectedBedId || ''}
-            onChange={(e) => setSelectedBedId(e.target.value || null)}
-            style={{
-              padding: '0.5rem',
-              borderRadius: '4px',
-              border: '1px solid #e2e8f0'
-            }}
-          >
-            <option value="">Select Bed for Slot</option>
-            {state.garden.beds.map(bed => (
-              <option key={bed.id} value={bed.id}>{bed.name}</option>
-            ))}
-          </select>
-          <button
-            onClick={() => setDrawingMode('slot')}
-            disabled={!selectedBedId}
-            style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: drawingMode === 'slot' ? '#38a169' : selectedBedId ? '#e2e8f0' : '#f7fafc',
-              color: drawingMode === 'slot' ? 'white' : selectedBedId ? '#333' : '#a0a0a0',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: selectedBedId ? 'pointer' : 'not-allowed'
-            }}
-          >
-            Draw Slot
-          </button>
-          <button
-            onClick={() => setShowGridConfig(!showGridConfig)}
-            style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: '#3182ce',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            Configure Grid
-          </button>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginRight: '1rem' }}>
+            <input
+              type="checkbox"
+              checked={editorMode}
+              onChange={(e) => setEditorMode(e.target.checked)}
+              style={{ cursor: 'pointer' }}
+            />
+            <span style={{ fontWeight: 'bold' }}>Editor</span>
+          </label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginRight: '1rem' }}>
+            <input
+              type="checkbox"
+              checked={debugMode}
+              onChange={(e) => setDebugMode(e.target.checked)}
+              style={{ cursor: 'pointer' }}
+            />
+            <span style={{ fontWeight: 'bold' }}>Debug</span>
+          </label>
+          {editorMode && (
+            <>
+              <button
+                onClick={() => setDrawingMode('bed')}
+                style={{
+                  padding: '0.5rem 1rem',
+                  backgroundColor: drawingMode === 'bed' ? '#38a169' : '#e2e8f0',
+                  color: drawingMode === 'bed' ? 'white' : '#333',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+              >
+                Draw Bed
+              </button>
+              <select
+                value={selectedBedId || ''}
+                onChange={(e) => setSelectedBedId(e.target.value || null)}
+                style={{
+                  padding: '0.5rem',
+                  borderRadius: '4px',
+                  border: '1px solid #e2e8f0'
+                }}
+              >
+                <option value="">Select Bed for Slot</option>
+                {state.garden.beds.map(bed => (
+                  <option key={bed.id} value={bed.id}>{bed.name}</option>
+                ))}
+              </select>
+              <button
+                onClick={() => setDrawingMode('slot')}
+                disabled={!selectedBedId}
+                style={{
+                  padding: '0.5rem 1rem',
+                  backgroundColor: drawingMode === 'slot' ? '#38a169' : selectedBedId ? '#e2e8f0' : '#f7fafc',
+                  color: drawingMode === 'slot' ? 'white' : selectedBedId ? '#333' : '#a0a0a0',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: selectedBedId ? 'pointer' : 'not-allowed'
+                }}
+              >
+                Draw Slot
+              </button>
+              <button
+                onClick={() => setShowGridConfig(!showGridConfig)}
+                style={{
+                  padding: '0.5rem 1rem',
+                  backgroundColor: '#3182ce',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+              >
+                Configure Grid
+              </button>
+            </>
+          )}
         </div>
       </div>
 
-      {drawingMode !== 'none' && (
+      {editorMode && drawingMode !== 'none' && (
         <div style={{
           backgroundColor: '#fef5e7',
           padding: '1rem',
@@ -421,7 +549,7 @@ export default function GardenView() {
         </div>
       )}
 
-      {showGridConfig && (
+      {editorMode && showGridConfig && (
         <div style={{
           backgroundColor: '#f7fafc',
           padding: '1rem',
@@ -516,7 +644,8 @@ export default function GardenView() {
           const cellKey = `${x}-${y}`;
           const plantedItem = plantedCells.get(cellKey);
           const bed = getBedForCell(x, y);
-          const slot = getSlotForCell(x, y);
+          const slotInfo = getSlotForCell(x, y);
+          const slot = slotInfo?.slot;
           
           return (
             <DroppableGridCell
@@ -525,15 +654,17 @@ export default function GardenView() {
               y={y}
               onPlantDrop={handlePlantDrop}
               onCellClick={handleCellClick}
-              onMouseDown={handleCellMouseDown}
-              onMouseEnter={handleCellMouseEnter}
-              onMouseUp={handleCellMouseUp}
-              onRightClick={handleRightClick}
+              onMouseDown={editorMode ? handleCellMouseDown : () => {}}
+              onMouseEnter={editorMode ? handleCellMouseEnter : () => {}}
+              onMouseUp={editorMode ? handleCellMouseUp : () => {}}
+              onRightClick={editorMode ? handleRightClick : () => {}}
               plantedItem={plantedItem ? { plant: plantedItem } : undefined}
-              drawingMode={drawingMode}
-              drawPreview={drawPreview}
+              drawingMode={editorMode ? drawingMode : 'none'}
+              drawPreview={editorMode ? drawPreview : undefined}
               bed={bed ? { id: bed.id, name: bed.name, position: bed.position } : undefined}
               slot={slot ? { id: slot.id, number: slot.number } : undefined}
+              getCellBorderStyle={getCellBorderStyle}
+              debugMode={debugMode}
             />
           );
         })}
@@ -559,7 +690,7 @@ export default function GardenView() {
       </div>
 
       {/* Bed and Slot Management */}
-      {state.garden.beds.length > 0 && (
+      {editorMode && state.garden.beds.length > 0 && (
         <div style={{
           backgroundColor: '#f7fafc',
           padding: '1rem',
@@ -567,7 +698,7 @@ export default function GardenView() {
           marginBottom: '1rem',
           border: '1px solid #e2e8f0'
         }}>
-          <h3 style={{ margin: '0 0 1rem 0' }}>Bed and Slot Management</h3>
+          <h3 style={{ margin: '0 0 1rem 0' }}>Bed and Slot Management{debugMode && ' (Debug Mode)'}</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
             {state.garden.beds.map(bed => (
               <div key={bed.id} style={{
@@ -641,6 +772,11 @@ export default function GardenView() {
                       >
                         {bed.name}
                       </h4>
+                      {debugMode && (
+                        <div style={{ fontSize: '0.7rem', color: '#666', marginTop: '0.25rem' }}>
+                          Position: ({bed.position.x}, {bed.position.y}) | Size: {bed.size.width}×{bed.size.height}
+                        </div>
+                      )}
                       <button
                         onClick={() => deleteBed(bed.id)}
                         style={{
@@ -676,6 +812,11 @@ export default function GardenView() {
                           <span style={{ fontSize: '0.7rem', fontWeight: 'bold' }}>
                             {slot.number}
                           </span>
+                          {debugMode && (
+                            <div style={{ fontSize: '0.6rem', color: '#666', lineHeight: '1' }}>
+                              ({slot.position.x},{slot.position.y}) {slot.size.width}×{slot.size.height}
+                            </div>
+                          )}
                           <button
                             onClick={() => deleteSlot(bed.id, slot.id)}
                             style={{

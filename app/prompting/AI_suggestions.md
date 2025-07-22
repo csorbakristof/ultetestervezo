@@ -78,3 +78,55 @@ If the bed management part is out of the screen, I cannot scroll to it...
 
 Now please update @specification.md to reflect the changes we made.
 
+## Editor checkbox
+
+Good. Now I want to have a checkbox in the Garden View which can hide all grid, bed and slot editing functions if unchecked. The title of the checkbox should be "Editor". If unchecked, I only want to see the map and the available plants.
+
+-----------------
+
+Currently, the map shows all sides of the cells inside the beds with bold lines. Modify the visualization so that only the boundaries of beds and slots have bold lines.
+
+--------------------
+
+Some sides of the beds are not bold. The beds which do not touch the bottom of the grid do not have bold lines in their bottom. And the bed in the bottom-left corner does not have a bold right side.
+
+----------------
+
+Your condition for the lower and right border is not working. It is still not bold.
+
+--------------------
+
+The bed in the upper-left corner does not touch the right or lower boundary of the grid as the bed is smaller. But it still does not show the beds right and lower boundary with bold. And if I draw a bed in the middle of the grid (not touching any sides of the grid), the lower bed boundary is still missing.
+
+----------------------
+
+In @GardenView.tsx line 401 there is an "else if" which means that if "if (slotInfo)" is true, "bed" is not taken into account in the cell border style logic. The boundary should be bold if it is either the boundary of a bed or the boundary of a slot.
+
+### Debug function needed
+
+Add a "Debug" checkbox beside the "Editor" checkbox. If "Debug" is checked, show the bed name and slot ID in every cell of the map.
+
+----
+
+Sorry, I meant to show the number of the slots, not their ID.
+
+----------
+
+If we are in Debug mode (Debug checkbox is checked), in the "Bed and Slot Management", show the position and size of the beds and slots as well. But only if Debug is checked.
+
+-----------
+
+If I draw a bed with top-left corner in position (1,1) and a slot inside it with upper-left position (1,1), then the slot is put into position (2,2). Store the position of the slots with absolute grid coordinates, not relative to the bed they are assigned to.
+
+--------------
+
+If I draw a slot into "Bed 2", it gets the number 1, although there is already a slot with number 1 in "Bed 1". Why did the new slot get the number 1 and not number 3?
+
+(Did not answer the question but modified the code accordingly. In this case, I have to explicitly ask AI to just answer the question and not modify anything.)
+
+-----------------
+
+Update the @specification.md to reflect the new changes we made. Do not include the global slot numbering because I have rolled back that change.
+
+------------------
+
