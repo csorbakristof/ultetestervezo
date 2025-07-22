@@ -212,3 +212,9 @@ Q: Did you manage to restore all previous functionalities after the refactor?
 
 (Now AI really checks functionalities in details!)
 
+# Further steps...
+
+Have a look at @hungarian_plants_database.json please. The "plant family" field is in english everywhere. Please translate those values into hungarian.
+
+-----
+

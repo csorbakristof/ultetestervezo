@@ -11,7 +11,7 @@
       "companionPlants": ["bazsalikom", "petrezselyem", "sárgarépa"],
       "growthDuration": 16,
       "spacingCm": 50,
-      "plantFamily": "Solanaceae",
+      "plantFamily": "Burgonyafélék",
       "season": "summer",
       "successionInterval": 4
     },
@@ -26,7 +26,7 @@
       "companionPlants": ["hagyma", "paradicsom", "saláta"],
       "growthDuration": 12,
       "spacingCm": 5,
-      "plantFamily": "Apiaceae",
+      "plantFamily": "Ernyősök",
       "season": "spring",
       "successionInterval": 3
     },
@@ -41,7 +41,7 @@
       "companionPlants": ["sárgarépa", "káposzta", "saláta"],
       "growthDuration": 20,
       "spacingCm": 10,
-      "plantFamily": "Amaryllidaceae",
+      "plantFamily": "Amarilliszfélék",
       "season": "spring",
       "successionInterval": 8
     },
@@ -56,7 +56,7 @@
       "companionPlants": ["hagyma", "saláta", "sárgarépa"],
       "growthDuration": 14,
       "spacingCm": 40,
-      "plantFamily": "Brassicaceae",
+      "plantFamily": "Keresztesvirágúak",
       "season": "spring",
       "successionInterval": 6
     },
@@ -71,7 +71,7 @@
       "companionPlants": ["sárgarépa", "retek", "hagyma"],
       "growthDuration": 8,
       "spacingCm": 25,
-      "plantFamily": "Asteraceae",
+      "plantFamily": "Fészkesek",
       "season": "spring",
       "successionInterval": 2
     },
@@ -86,7 +86,7 @@
       "companionPlants": ["saláta", "sárgarépa", "uborka"],
       "growthDuration": 4,
       "spacingCm": 3,
-      "plantFamily": "Brassicaceae",
+      "plantFamily": "Keresztesvirágúak",
       "season": "spring",
       "successionInterval": 2
     },
@@ -101,7 +101,7 @@
       "companionPlants": ["retek", "saláta", "kukorica"],
       "growthDuration": 10,
       "spacingCm": 30,
-      "plantFamily": "Cucurbitaceae",
+      "plantFamily": "Tökfélék",
       "season": "summer",
       "successionInterval": 3
     },
@@ -116,7 +116,7 @@
       "companionPlants": ["bazsalikom", "oregano", "paradicsom"],
       "growthDuration": 16,
       "spacingCm": 40,
-      "plantFamily": "Solanaceae",
+      "plantFamily": "Burgonyafélék",
       "season": "summer",
       "successionInterval": 4
     },
@@ -131,7 +131,7 @@
       "companionPlants": ["sárgarépa", "retek", "saláta"],
       "growthDuration": 12,
       "spacingCm": 15,
-      "plantFamily": "Fabaceae",
+      "plantFamily": "Pillangósok",
       "season": "spring",
       "successionInterval": 4
     },
@@ -146,7 +146,7 @@
       "companionPlants": ["kukorica", "sárgarépa", "káposzta"],
       "growthDuration": 10,
       "spacingCm": 20,
-      "plantFamily": "Fabaceae",
+      "plantFamily": "Pillangósok",
       "season": "summer",
       "successionInterval": 3
     },
@@ -161,7 +161,7 @@
       "companionPlants": ["kukorica", "retek", "bab"],
       "growthDuration": 12,
       "spacingCm": 60,
-      "plantFamily": "Cucurbitaceae",
+      "plantFamily": "Tökfélék",
       "season": "summer",
       "successionInterval": 4
     },
@@ -176,7 +176,7 @@
       "companionPlants": ["paradicsom", "sárgarépa", "rózsa"],
       "growthDuration": 10,
       "spacingCm": 15,
-      "plantFamily": "Apiaceae",
+      "plantFamily": "Ernyősök",
       "season": "spring",
       "successionInterval": 4
     },
@@ -191,7 +191,7 @@
       "companionPlants": ["uborka", "káposzta", "hagyma"],
       "growthDuration": 8,
       "spacingCm": 20,
-      "plantFamily": "Apiaceae",
+      "plantFamily": "Ernyősök",
       "season": "summer",
       "successionInterval": 3
     },
@@ -206,7 +206,7 @@
       "companionPlants": ["saláta", "retek", "eper"],
       "growthDuration": 7,
       "spacingCm": 15,
-      "plantFamily": "Amaranthaceae",
+      "plantFamily": "Libatopfélék",
       "season": "spring",
       "successionInterval": 2
     },
@@ -221,7 +221,7 @@
       "companionPlants": ["hagyma", "káposzta", "saláta"],
       "growthDuration": 14,
       "spacingCm": 10,
-      "plantFamily": "Amaranthaceae",
+      "plantFamily": "Libatopfélék",
       "season": "summer",
       "successionInterval": 4
     },
@@ -236,7 +236,7 @@
       "companionPlants": ["paradicsom", "paprika", "uborka"],
       "growthDuration": 12,
       "spacingCm": 25,
-      "plantFamily": "Lamiaceae",
+      "plantFamily": "Ajakosok",
       "season": "summer",
       "successionInterval": 4
     },
@@ -251,7 +251,7 @@
       "companionPlants": ["kukorica", "bab", "retek"],
       "growthDuration": 18,
       "spacingCm": 100,
-      "plantFamily": "Cucurbitaceae",
+      "plantFamily": "Tökfélék",
       "season": "summer",
       "successionInterval": 6
     },
@@ -266,7 +266,7 @@
       "companionPlants": ["rózsa", "paradicsom", "sárgarépa"],
       "growthDuration": 32,
       "spacingCm": 15,
-      "plantFamily": "Amaryllidaceae",
+      "plantFamily": "Amarilliszfélék",
       "season": "fall",
       "successionInterval": 12
     },
@@ -281,7 +281,7 @@
       "companionPlants": ["bab", "kukorica", "káposzta"],
       "growthDuration": 18,
       "spacingCm": 30,
-      "plantFamily": "Solanaceae",
+      "plantFamily": "Burgonyafélék",
       "season": "spring",
       "successionInterval": 8
     },
@@ -296,7 +296,7 @@
       "companionPlants": ["hagyma", "saláta", "sárgarépa"],
       "growthDuration": 12,
       "spacingCm": 45,
-      "plantFamily": "Brassicaceae",
+      "plantFamily": "Keresztesvirágúak",
       "season": "spring",
       "successionInterval": 4
     }
