@@ -165,12 +165,22 @@ Modify the Timeline View to a transposed grid: rows should be the weeks and colu
 
 Update @specification.md to match the new changes.
 
-
 ## Persistency
 
+Beside the 3 pages of the application, add a new one called "Storage". Add functions to it from the @specification.md section "Save and Load Operations".
+
+----
+
+Q: If I import a complete garden configuration, does it overwrite all previous data?
 
 # Create user guide
 
+I have created a @userguide.md file. Can you create a complete user guide for the application into this file?
 
 # Improve source code
+
+
+# Közben chatgpt.com
+
+I am creating an application where I can design my garden: what plants I will grow, when to plant and when to harvest them. I need a database (preferable in JSON format) which contains all the most common plants grown in Hungary. The database should include hungarian names, month of planting, growth duration, months of harvesting, an emoji representing the plant, and properties like water and sunlight requirements. Can you create this for me? First let's try this with the 10 most common plants.
 

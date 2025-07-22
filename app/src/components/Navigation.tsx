@@ -1,6 +1,6 @@
 interface NavigationProps {
-  currentView: 'garden' | 'timeline' | 'plants';
-  onViewChange: (view: 'garden' | 'timeline' | 'plants') => void;
+  currentView: 'garden' | 'timeline' | 'plants' | 'storage';
+  onViewChange: (view: 'garden' | 'timeline' | 'plants' | 'storage') => void;
 }
 
 export default function Navigation({ currentView, onViewChange }: NavigationProps) {
@@ -24,6 +24,12 @@ export default function Navigation({ currentView, onViewChange }: NavigationProp
         onClick={() => onViewChange('plants')}
       >
         Plant Library
+      </button>
+      <button
+        className={`nav-button ${currentView === 'storage' ? 'active' : ''}`}
+        onClick={() => onViewChange('storage')}
+      >
+        Storage
       </button>
     </nav>
   );

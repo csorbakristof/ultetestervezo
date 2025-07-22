@@ -5,10 +5,11 @@ import './App.css'
 import GardenView from './components/GardenView'
 import TimelineView from './components/TimelineView'
 import PlantLibrary from './components/PlantLibrary'
+import Storage from './components/Storage'
 import Navigation from './components/Navigation'
 import { GardenProvider } from './context/GardenContext'
 
-type View = 'garden' | 'timeline' | 'plants';
+type View = 'garden' | 'timeline' | 'plants' | 'storage';
 
 function App() {
   const [currentView, setCurrentView] = useState<View>('garden')
@@ -22,6 +23,7 @@ function App() {
             {currentView === 'garden' && <GardenView />}
             {currentView === 'timeline' && <TimelineView />}
             {currentView === 'plants' && <PlantLibrary />}
+            {currentView === 'storage' && <Storage />}
           </main>
         </div>
       </GardenProvider>
